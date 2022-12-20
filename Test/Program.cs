@@ -6,10 +6,7 @@ internal class Program
 {
     static void Main(string[] args)
     {
-        Console.OutputEncoding = System.Text.Encoding.UTF8;
-        Console.WriteLine('\u2654');
-        Console.WriteLine('\u2655');
-        Console.WriteLine('\u265A');
+        Console.OutputEncoding = Encoding.UTF8;
 
         var n = new NotationBuilder();
         Move m = new Move();
