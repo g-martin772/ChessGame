@@ -1,15 +1,6 @@
 ﻿namespace Chess;
 
 
-
-public class Move
-{
-    public EFigure Piece { get; set; }
-    public bool IsCapture { get; set; }
-    public Square From { get; set; }
-    public Square To { get; set; }
-}
-
 public class NotationBuilder
 {
     private const string RANKS = "12345678";

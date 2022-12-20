@@ -5,7 +5,8 @@ public enum EGameState
     Playing,
     Draw,
     WonByWhite,
-    WonByBlack
+    WonByBlack,
+    Paused
 }
 
 public struct ChessTiming
@@ -27,7 +28,7 @@ public interface IChessBoard
     void Reset();
     void Init(Player player1, Player player2, ChessTiming timing);
     void Start();
-    void Move(Move move);
+    bool Move(Move move);
     Move[] GetMovesFor(string notation);
     (string[] player1, string[] player2) GetMoveLog();
     EGameState GetGameStatus();

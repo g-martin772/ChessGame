@@ -1,18 +1,6 @@
 ﻿namespace Chess;
 
-public struct Square
-{
-    public int x;
-    public int y;
-
-    public Square(int x, int y)
-    {
-        this.x = x;
-        this.y = y;
-    }
-}
-
-public class ChessBoard : IChessBoard
+public partial class ChessBoard : IChessBoard
 {
     public (EFigure figure, bool isWhite)[,] Board { get; private set; }
 
@@ -20,26 +8,16 @@ public class ChessBoard : IChessBoard
     public (Player player1, Player player2) Players { get; private set; }
 
     private ChessTiming timing;
+    private EGameState gameState = EGameState.Paused;
     private bool whiteToMove;
 
     public EGameState GetGameStatus()
     {
-        return EGameState.Playing;
+        return gameState;
         // TODO: Implement game end system
     }
 
     public (string[] player1, string[] player2) GetMoveLog()
-    {
-        throw new NotImplementedException();
-    }
-
-    public Move[] GetMovesFor(string notation)
-    {
-        throw new NotImplementedException();
-    }
-
-
-    public void Move(Move move)
     {
         throw new NotImplementedException();
     }
@@ -89,11 +67,13 @@ public class ChessBoard : IChessBoard
         {
             Board[i, 6] = (EFigure.P, false);
         }
+
+        whiteToMove = true;
     }
 
     public void Start()
     {
         // TODO: Start timing thread
-        throw new NotImplementedException();
+        gameState = EGameState.Playing;
     }
 }
