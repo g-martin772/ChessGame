@@ -1,3 +1,7 @@
+# Output
+bin/
+obj/
+
 # Prerequisites
 *.d
 
