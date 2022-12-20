@@ -8,56 +8,27 @@ public enum EGameState
     WonByBlack
 }
 
-public class Player
+public struct ChessTiming
 {
-    public string Name { get; private set; }
-    public int Elo { get; private set; }
-    public int Age { get; private set; }
-    public string Nationality { get; private set; }
-    public int Wins { get; private set; }
-
-    public Player()
+    public TimeOnly time;
+    public short gain;
+    public ChessTiming(TimeOnly time, short gain = 0)
     {
-        try
-        {
-            Console.WriteLine("Name: ");
-            Name = Console.ReadLine();
-            Console.WriteLine("Alter: ");
-            Age = Convert.ToInt32(Console.ReadLine());
-            if (Age <= 0)
-                throw new Exception("Alter kann nicht kleiner gleich null sein!");
-            Console.WriteLine("Nationalität: "); 
-            Nationality = Console.ReadLine();
-            //Hardcode vorerst
-            Console.WriteLine("Elo: ");
-            Elo = Convert.ToInt32(Console.ReadLine());
-            if (Elo < 0)
-                throw new Exception("Elo kann nicht kleiner als null sein!");
-            Console.WriteLine("Gewinne: ");
-            Wins = Convert.ToInt32(Console.ReadLine());
-            if (Wins < 0)
-                throw new Exception("Gewinne können nicht kleiner als null sein!");
-
-        }
-        catch(Exception e)
-        {
-            Console.WriteLine(e.Message);
-        }
+        this.time = time;
+        this.gain = gain;
     }
 }
 
 public interface IChessBoard
 {
-    TimeOnly Time { get; }
-    (EFigure, bool)[,] Board { get; }
+    (TimeOnly player1, TimeOnly player2) Time { get; }
+    (Player player1, Player player2) Players { get; }
+    (EFigure figure, bool isWhite)[,] Board { get; }
     void Reset();
-    // void Init(Player player1, Player player2, TimeOnly timing);
-    void Move(string notation);
-    // (int x, int y)[] GetMovesFor(string notation);
-    // (string[], string[]) GetMoveLog();
-    // event CheckHandler Check;
-    // event EventHandler GameEnd;
+    void Init(Player player1, Player player2, ChessTiming timing);
+    void Start();
+    void Move(Move move);
+    Move[] GetMovesFor(string notation);
+    (string[] player1, string[] player2) GetMoveLog();
+    EGameState GetGameStatus();
 }
-
-public delegate void CheckHandler(bool player);
-public delegate void GameEndHandler(EGameState state);

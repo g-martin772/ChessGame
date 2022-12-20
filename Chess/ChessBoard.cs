@@ -1,20 +1,58 @@
 ﻿namespace Chess;
 
+public struct Square
+{
+    public int x;
+    public int y;
+
+    public Square(int x, int y)
+    {
+        this.x = x;
+        this.y = y;
+    }
+}
+
 public class ChessBoard : IChessBoard
 {
-    public TimeOnly Time { get; private set; }
+    public (EFigure figure, bool isWhite)[,] Board { get; private set; }
 
-    public (EFigure, bool)[,] Board { get; private set; }
+    public (TimeOnly player1, TimeOnly player2) Time { get; private set; }
+    public (Player player1, Player player2) Players { get; private set; }
 
-    public void Move(string notation)
+    private ChessTiming timing;
+    private bool whiteToMove;
+
+    public EGameState GetGameStatus()
+    {
+        return EGameState.Playing;
+        // TODO: Implement game end system
+    }
+
+    public (string[] player1, string[] player2) GetMoveLog()
     {
         throw new NotImplementedException();
     }
 
+    public Move[] GetMovesFor(string notation)
+    {
+        throw new NotImplementedException();
+    }
+
+
+    public void Move(Move move)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void Init(Player player1, Player player2, ChessTiming timing)
+    {
+        this.timing = timing;
+        Players = (player1, player2);
+        Reset();
+    }
+
     public void Reset()
     {
-        Time = new TimeOnly();
-
         Board = new (EFigure, bool)[8, 8];
 
         for (int i = 0; i < Board.GetLength(0); i++)
@@ -24,32 +62,38 @@ public class ChessBoard : IChessBoard
                 Board[i, j] = (EFigure.None, true);
             }
         }
-        Board[0, 0] = (EFigure.R, true);
-        Board[1, 0] = (EFigure.N, true);
-        Board[2, 0] = (EFigure.B, true);
-        Board[3, 0] = (EFigure.K, true);
-        Board[4, 0] = (EFigure.Q, true);
-        Board[5, 0] = (EFigure.B, true);
-        Board[6, 0] = (EFigure.N, true);
-        Board[7, 0] = (EFigure.R, true);
+        Board[0, 0] = (EFigure.Rook, true);
+        Board[1, 0] = (EFigure.Knight, true);
+        Board[2, 0] = (EFigure.Bishop, true);
+        Board[3, 0] = (EFigure.King, true);
+        Board[4, 0] = (EFigure.Queen, true);
+        Board[5, 0] = (EFigure.Bishop, true);
+        Board[6, 0] = (EFigure.Knight, true);
+        Board[7, 0] = (EFigure.Rook, true);
 
         for (int i = 0; i < Board.GetLength(0); i++)
         {
             Board[i, 1] = (EFigure.P, true);
         }
 
-        Board[0, 7] = (EFigure.R, false);
-        Board[1, 7] = (EFigure.N, false);
-        Board[2, 7] = (EFigure.B, false);
-        Board[3, 7] = (EFigure.K, false);
-        Board[4, 7] = (EFigure.Q, false);
-        Board[5, 7] = (EFigure.B, false);
-        Board[6, 7] = (EFigure.N, false);
-        Board[7, 7] = (EFigure.R, false);
+        Board[0, 7] = (EFigure.Rook, false);
+        Board[1, 7] = (EFigure.Knight, false);
+        Board[2, 7] = (EFigure.Bishop, false);
+        Board[3, 7] = (EFigure.King, false);
+        Board[4, 7] = (EFigure.Queen, false);
+        Board[5, 7] = (EFigure.Bishop, false);
+        Board[6, 7] = (EFigure.Knight, false);
+        Board[7, 7] = (EFigure.Rook, false);
 
         for (int i = 0; i < Board.GetLength(1); i++)
         {
             Board[i, 6] = (EFigure.P, false);
         }
+    }
+
+    public void Start()
+    {
+        // TODO: Start timing thread
+        throw new NotImplementedException();
     }
 }
