@@ -5,42 +5,87 @@ namespace Test;
 
 internal class Program
 {
-    static void Main(string[] args)
-    {
-        Console.OutputEncoding = Encoding.UTF8;
+	static void Main(string[] args)
+	{
+		Console.OutputEncoding = Encoding.UTF8;
 
-        var n = new NotationBuilder();
-        Move m = new Move();
-        m.IsCapture = true;
-        m.Piece = EFigure.K;
-        m.From = new Square(0, 2);
-        m.To = new Square(1, 2);
-        Console.WriteLine(n.GetNotation(m));
+		ChessBoard board = new ChessBoard();
+		board.Reset();
+		Square pos = new(0, 0);
+		Square selection = new(0, 0);
+		bool selected = false;
 
+		while (true)
+		{
+			// Give time for rendering console output before clearing
+			Thread.Sleep(50);
+			
+			DrawChessBoard(board.Board, pos);
 
-        IChessBoard board = new ChessBoard();
-        board.Reset();
-        DrawChessBoard(board.Board);
-    }
+			switch (Console.ReadKey().Key)
+			{
+				case ConsoleKey.Enter:
+					if (!selected)
+					{
+						selected = true;
+						selection = pos;
+					}
+					else
+					{
+						selected = false;
+						board.Move(new Move()
+						{
+							From = new(selection.x, selection.y),
+							To = new(pos.x, pos.y)
+						});
+					}
+					break;
+				case ConsoleKey.LeftArrow:
+					if(pos.x > 0)
+						pos.x--;
+					break;
+				case ConsoleKey.DownArrow:
+					if(pos.y < 7)
+						pos.y++;
+					break;
+				case ConsoleKey.RightArrow:
+					if(pos.x < 7)
+						pos.x++;
+					break;
+				case ConsoleKey.UpArrow:
+					if(pos.y > 0)
+						pos.y--;
+					break;
+			}
 
-    public static void DrawChessBoard((EFigure, bool)[,] board)
-    {
-        for (int i = 0; i < board.GetLength(0); i++)
-        {
-            for (int j = 0; j < board.GetLength(1); j++)
-            {
-                (EFigure figure, bool white) = board[j, i];
-                if (white)
-                    Console.ForegroundColor = ConsoleColor.White;
-                else                                            // BackgroundColor fehlt -> mit Modulo
-                {
-                    Console.ForegroundColor = ConsoleColor.Black;
-                    Console.BackgroundColor = ConsoleColor.White;
-                }
-                Console.Write((char)(int)figure);
-                Console.ResetColor();
-            }
-            Console.WriteLine();
-        }
-    }
+			Console.Clear();
+		}
+	}
+
+	public static void DrawChessBoard((EFigure, bool)[,] board, Square pos)
+	{
+		for (int i = 0; i < board.GetLength(0); i++)
+		{
+			for (int j = 0; j < board.GetLength(1); j++)
+			{
+				(EFigure figure, bool white) = board[j, i];
+				if(pos.x == j && pos.y == i)
+					Console.BackgroundColor = ConsoleColor.Red;
+				else if (i % 2 == 0 ? j % 2 == 0 : j % 2 == 1)
+					Console.BackgroundColor = ConsoleColor.DarkYellow;
+				else
+					Console.BackgroundColor = ConsoleColor.DarkGray;
+
+				if (white)
+					Console.ForegroundColor = ConsoleColor.White;
+				else
+					Console.ForegroundColor = ConsoleColor.Black;
+
+				Console.Write((char)figure);
+				Console.Write(' ');
+				Console.ResetColor();
+			}
+			Console.WriteLine();
+		}
+	}
 }
